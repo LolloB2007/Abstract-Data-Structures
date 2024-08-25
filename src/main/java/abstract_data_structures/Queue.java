@@ -6,8 +6,10 @@ package abstract_data_structures;
  * 
  * working methods:
  * enqueue
- * dequeue
+ * peek
  * size
+ * (private) peekN --> peek last node
+ * retrieve
  * toString
  * 
  *  @author lorenzobarbagelata
@@ -61,17 +63,17 @@ public class Queue<t>{
         head = temp;
     }
     
-    public t dequeue()
+    public t peek()
     {
         if(head==null){return null;}
         if(head.getNext()==null){return (t) head.getData();}
-        return dequeue(head.getNext());
+        return peek(head.getNext());
     }
     
-    private t dequeue(Node n)
+    private t peek(Node n)
     {
         if(n.getNext()==null){return (t) n.getData();}
-        return dequeue(n.getNext());
+        return peek(n.getNext());
     }
     
     public int size()
@@ -85,6 +87,41 @@ public class Queue<t>{
     {
         if(n==null){return 0;}
         return 1+size(n.getNext());
+    }
+    
+    private Node peekN()
+    {
+        if(head==null){return null;}
+        if(head.getNext()==null){return head;}
+        return peekN(head.getNext());
+    }
+    
+    private Node peekN(Node n)
+    {
+        if(n.getNext()==null){return n;}
+        return peekN(n.getNext());
+    }
+    
+    public t retrieve()
+    {
+        if(size()==0){return null;}
+        if(size()==1)
+        {
+            Node temp = head;
+            head = null;
+            return (t) temp.getData();
+        }
+        
+        Node last = peekN();
+        Node temp = head;
+        
+        while(temp.getNext()!=last)
+        {
+            temp = temp.getNext();
+        }
+        
+        temp.setNext(null);
+        return (t) last.getData();
     }
     
     public String toString()
